@@ -1,4 +1,36 @@
 package main.wba_projekt.task.model;
 
-public class Comment {
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import main.wba_projekt.common.BaseEntity;
+import main.wba_projekt.security.model.User;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import java.time.LocalDateTime;
+import java.util.Set;
+
+@Entity
+@Setter
+@Getter
+@ToString
+@NoArgsConstructor
+public class Comment extends BaseEntity<Long> {
+
+    private String text;
+
+    private LocalDateTime createDate;
+
+    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, optional = false)
+    @JoinColumn(name = "task_id", nullable = false, unique = true)
+    private Task task;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name = "comment_author_id")
+    private User comment_author;
+
 }
