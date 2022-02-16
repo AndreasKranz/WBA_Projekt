@@ -9,9 +9,7 @@ import main.wba_projekt.security.model.User;
 import main.wba_projekt.task.model.Task;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Setter
@@ -23,10 +21,12 @@ public class Board extends BaseEntity<Long> {
     private String title;
 
 
-    @ManyToMany(mappedBy = "boards", cascade = CascadeType.PERSIST)
-    private Set<User> users = new LinkedHashSet<>();
+
 
     @OneToMany(mappedBy = "board", cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)
     private Set<Task> tasks = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "assigned_board", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<User> users = new ArrayList<>();
 
 }

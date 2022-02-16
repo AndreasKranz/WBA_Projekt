@@ -42,8 +42,9 @@ public class Task extends BaseEntity<Long> {
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
-    @ManyToMany(mappedBy = "assigned_tasks", cascade = CascadeType.PERSIST)
-    private Set<User> users_assigned = new LinkedHashSet<>();
+    @ManyToOne(cascade = CascadeType.PERSIST, optional = false)
+    @JoinColumn(name = "assigned_user", nullable = false)
+    private User user;
 
 //Anhang als Objekt, wenn es nicht klappt nur Links anbieten TUTORIAL ANGUCKEN
 
