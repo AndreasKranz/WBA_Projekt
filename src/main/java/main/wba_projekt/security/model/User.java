@@ -5,9 +5,6 @@ import main.wba_projekt.board.model.Board;
 import main.wba_projekt.common.BaseEntity;
 import main.wba_projekt.task.model.Comment;
 import main.wba_projekt.task.model.Task;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Marker;
 
 import javax.persistence.*;
 import java.util.*;
@@ -15,14 +12,14 @@ import java.util.*;
 @Entity
 @Setter
 @Getter
-@ToString(exclude = {"boards","createdtasks","assigned_tasks","written_comments"})
+@ToString(exclude = {"createdtasks","assigned_board","written_comments"})
 @NoArgsConstructor
 public class User extends BaseEntity<Long> {
 
 
-    private String firstname;
+    private String firstName;
 
-    private String lastname;
+    private String lastName;
 
     private Boolean Admin;
 
