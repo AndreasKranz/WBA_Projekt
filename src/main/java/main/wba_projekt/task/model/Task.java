@@ -46,8 +46,4 @@ public class Task extends BaseEntity<Long> {
     @JoinColumn(name = "assigned_user", nullable = false)
     private User user;
 
-//Anhang als Objekt, wenn es nicht klappt nur Links anbieten TUTORIAL ANGUCKEN
-
-
-
 }

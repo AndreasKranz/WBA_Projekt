@@ -20,9 +20,6 @@ public class Board extends BaseEntity<Long> {
 
     private String title;
 
-
-
-
     @OneToMany(mappedBy = "board", cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)
     private Set<Task> tasks = new LinkedHashSet<>();
 
