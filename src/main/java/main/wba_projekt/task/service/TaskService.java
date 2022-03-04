@@ -1,40 +1,15 @@
 package main.wba_projekt.task.service;
 
-import main.wba_projekt.security.repository.UserRepository;
-import main.wba_projekt.task.model.Comment;
-import main.wba_projekt.task.model.Task;
 import main.wba_projekt.task.DTO.TaskDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import main.wba_projekt.task.model.Task;
 
-@Service
-public class TaskService {
+public interface TaskService {
 
-    @Autowired
-    UserRepository userRepo;
+    Task createTask(TaskDTO input);
 
-    public Task createTask(TaskDTO input){
+    void addComment();
 
-        Task task = new Task();
-        task.setAuthor(userRepo.findByEmail(input.getAuthorEmail()));
-        task.setUser(userRepo.findByEmail(input.getAssignedEmail()));
-        task.setCreateDate(input.getCreationDate());
-        task.setEditDate(input.getCreationDate());
-        task.setDescription(input.getDescription());
+    Task editTask(TaskDTO input);
 
-
-        return task;
-    }
-
-    public void addComment(Task task, Comment comment){
-        //TODO Fehler- oder Rückmeldung
-        comment.setTask(task);
-        task.getComments().add(comment);
-
-    }
-
-    public void editTask(){
-
-    }
 
 }

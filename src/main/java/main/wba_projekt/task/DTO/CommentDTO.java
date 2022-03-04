@@ -5,16 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 @Setter
-public class CommentResponseDTO implements Serializable {
+@Getter
+public class CommentDTO {
 
-    String text;
-
-
+    String authorEmail, text;
+    LocalDateTime createDateTime;
+    Long taskId,id;
 
 }

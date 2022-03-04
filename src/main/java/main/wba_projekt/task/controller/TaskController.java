@@ -1,11 +1,13 @@
 package main.wba_projekt.task.controller;
 
+import main.wba_projekt.task.DTO.CommentDTO;
+import main.wba_projekt.task.DTO.CommentResponseDTO;
 import main.wba_projekt.task.DTO.TaskDTO;
 import main.wba_projekt.task.DTO.TaskResponseDTO;
 import main.wba_projekt.task.model.Task;
 import main.wba_projekt.task.repository.CommentRepository;
 import main.wba_projekt.task.repository.TaskRepository;
-import main.wba_projekt.task.service.TaskService;
+import main.wba_projekt.task.service.TaskServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class TaskController {
 
     @Autowired
-    TaskService taskService;
+    TaskServiceImpl taskService;
 
     @Autowired
     TaskRepository taskRepo;
@@ -58,7 +60,10 @@ public class TaskController {
         }
     }
 
-
+    @PostMapping(value = "task/writecomment", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> writeComment(@RequestBody CommentDTO input){
+        return ResponseEntity.status(HttpStatus.OK).body(new CommentResponseDTO("aaa"));
+    }
 
 
 }
