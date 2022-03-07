@@ -1,46 +1,123 @@
 package main.wba_projekt.task.service;
 
 import main.wba_projekt.security.repository.UserRepository;
+import main.wba_projekt.task.DTO.CommentDTO;
+import main.wba_projekt.task.DTO.TaskDTO;
 import main.wba_projekt.task.model.Comment;
 import main.wba_projekt.task.model.Task;
-import main.wba_projekt.task.DTO.TaskDTO;
+import main.wba_projekt.task.model.TaskPriority;
+import main.wba_projekt.task.model.TaskStatus;
+import main.wba_projekt.task.repository.CommentRepository;
+import main.wba_projekt.task.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class TaskServiceImpl implements TaskService{
 
-    @Autowired
+    //@Autowired
     UserRepository userRepo;
 
-    public Task createTask(TaskDTO input){
+    //@Autowired
+    TaskRepository taskRepo;
 
+    //@Autowired
+    CommentRepository commentRepo;
+
+    @Autowired
+    public TaskServiceImpl(UserRepository userRepo, TaskRepository taskRepo, CommentRepository commentRepo){
+        this.taskRepo = taskRepo;
+        this.commentRepo = commentRepo;
+        this.userRepo = userRepo;
+    }
+
+    public Task createTask(TaskDTO input) {
         Task task = new Task();
+
         task.setAuthor(userRepo.findByEmail(input.getAuthorEmail()));
-        task.setUser(userRepo.findByEmail(input.getAssignedEmail()));
+        task.setAssignee(userRepo.findByEmail(input.getAssignedEmail()));
         task.setCreateDate(input.getCreationDate());
         task.setEditDate(input.getCreationDate());
         task.setDescription(input.getDescription());
-
+        task.setStatus(TaskStatus.BACKLOG);
+        task.setPriority(TaskPriority.NORMAL);
 
         return task;
     }
 
     @Override
-    public void addComment() {
-
+    public ArrayList<TaskDTO> listAllTasks() {
+        List<Task> tasks = taskRepo.findAll();
+        ArrayList<TaskDTO> dtos = new ArrayList<>();
+        for (Task t:tasks){
+            dtos.add(castTaskToTaskDTO(t));
+        }
+        return dtos;
     }
 
-    public void addComment(Task task, Comment comment){
-        //TODO Fehler- oder Rückmeldung
-        comment.setTask(task);
-        task.getComments().add(comment);
+    private TaskDTO castTaskToTaskDTO(Task task){
+        TaskDTO dto = new TaskDTO();
 
+        dto.setTitle(task.getTitle());
+        dto.setDescription(task.getDescription());
+        dto.setEditDate(task.getEditDate());
+        dto.setCreationDate(task.getCreateDate());
+        dto.setPriority(task.getPriority());
+        dto.setStatus(task.getStatus());
+        dto.setAssignedEmail(task.getAssignee().getEmail());
+        dto.setAuthorEmail(task.getAuthor().getEmail());
+        dto.setId(task.getId());
+
+        return dto;
+    }
+
+    @Override
+    public void addComment(CommentDTO commentInput) {
+        Task task = taskRepo.findTaskById(commentInput.getTaskId());
+        Comment newComment = new Comment();
+
+        newComment.setComment_author(userRepo.findByEmail(commentInput.getAuthorEmail()));
+        newComment.setTask(task);
+        //newComment.setCreateDate(LocalDateTime.now()); für Test
+        newComment.setCreateDate(LocalDateTime.of(2000,1,1,1,1));
+        newComment.setText(commentInput.getText());
+
+        Set<Comment> comments = task.getComments();
+        comments.add(newComment);
+        task.setComments(comments);
+
+        commentRepo.save(newComment);
+        taskRepo.save(task);
     }
 
     public Task editTask(TaskDTO input){
+        Task task = taskRepo.findTaskById(input.getId());
 
-        return new Task();
+        task.setDescription(input.getDescription());
+        task.setEditDate(LocalDateTime.now());
+        task.setAssignee(userRepo.findByEmail(input.getAssignedEmail()));
+        task.setPriority(input.getPriority());
+        task.setStatus(input.getStatus());
+        task.setPriority(input.getPriority());
+
+        return task;
+    }
+
+    @Override
+    public void deleteTask(TaskDTO input){
+        Task task = taskRepo.findTaskById(input.getId());
+        Set<Comment> comments = task.getComments();
+
+        for (Comment c:comments){
+            commentRepo.delete(c);
+        }
+
+        taskRepo.delete(task);
     }
 
 }

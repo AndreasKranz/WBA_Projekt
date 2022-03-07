@@ -1,5 +1,6 @@
 package main.wba_projekt.common;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,7 @@ public abstract class BaseEntity<PK extends Serializable> {
 
     @Id
     @GeneratedValue
+    @Setter(AccessLevel.PRIVATE)
     private PK id;
 
     @Override

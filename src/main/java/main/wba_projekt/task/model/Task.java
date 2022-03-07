@@ -15,7 +15,7 @@ import java.util.*;
 @Entity
 @Getter
 @Setter
-@ToString(exclude = {"users_assigned","comments"})
+@ToString(exclude = {"assignee","comments"})
 @NoArgsConstructor
 public class Task extends BaseEntity<Long> {
 
@@ -44,6 +44,6 @@ public class Task extends BaseEntity<Long> {
 
     @ManyToOne(cascade = CascadeType.PERSIST, optional = false)
     @JoinColumn(name = "assigned_user", nullable = false)
-    private User user;
+    private User assignee;
 
 }

@@ -14,9 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 @Controller
 public class TaskController {
@@ -32,6 +32,7 @@ public class TaskController {
 
     @PostMapping(value = "/task/create", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createTask(@RequestBody TaskDTO input) {
+
         Task newTask = taskService.createTask(input);
 
         taskRepo.save(newTask);
@@ -44,15 +45,20 @@ public class TaskController {
     }
 
     //Unfertig
-    @RequestMapping("/tasks")
+    @RequestMapping(value = "/tasks", method = {RequestMethod.GET,RequestMethod.POST})
     public String listAllTask(Model model) {
+        ArrayList<TaskDTO> tasks = taskService.listAllTasks();
+        model.addAttribute("listTaks",tasks);
 
-        return "tasks";
+        return "board";
     }
 
     @PostMapping(value = "task/edit", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> editTask(@RequestBody TaskDTO input){
-        //TODO auch TaskDTO benutzen oder neuen erstellen ??!
+        Task editedTask = taskService.editTask(input);
+
+        taskRepo.save(editedTask);
+
         if (true) {
             return ResponseEntity.status(HttpStatus.OK).body(new TaskResponseDTO("Aufgabe konnte angepasst werden"));
         } else {
@@ -62,8 +68,18 @@ public class TaskController {
 
     @PostMapping(value = "task/writecomment", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> writeComment(@RequestBody CommentDTO input){
-        return ResponseEntity.status(HttpStatus.OK).body(new CommentResponseDTO("aaa"));
+        taskService.addComment(input);
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(new CommentResponseDTO("Neues Kommentar wurde erstellt"));
     }
 
+    @DeleteMapping("task/delete")
+    public ResponseEntity<?> deleteTask(@RequestBody TaskDTO input){
+        taskService.deleteTask(input);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new TaskResponseDTO("Aufgabe wurde erfolgreich gelöscht"));
+
+    }
 
 }
