@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @Setter
@@ -25,12 +24,14 @@ public class Comment extends BaseEntity<Long> {
 
     private LocalDateTime createDate;
 
-    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, optional = false)
-    @JoinColumn(name = "task_id", nullable = false, unique = true)
-    private Task task;
+
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "comment_author_id")
     private User comment_author;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "task_id", nullable = false)
+    private Task task;
 
 }

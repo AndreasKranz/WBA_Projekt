@@ -7,7 +7,7 @@ import main.wba_projekt.task.DTO.TaskResponseDTO;
 import main.wba_projekt.task.model.Task;
 import main.wba_projekt.task.repository.CommentRepository;
 import main.wba_projekt.task.repository.TaskRepository;
-import main.wba_projekt.task.service.TaskServiceImpl;
+import main.wba_projekt.task.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class TaskController {
 
     @Autowired
-    TaskServiceImpl taskService;
+    TaskService taskService;
 
     @Autowired
     TaskRepository taskRepo;

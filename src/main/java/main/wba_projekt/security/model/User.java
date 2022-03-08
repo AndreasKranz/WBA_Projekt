@@ -29,11 +29,11 @@ public class User extends BaseEntity<Long> {
 
     @Setter(AccessLevel.NONE)
     @OneToMany(mappedBy = "author",  orphanRemoval = true)
-    private List<Task> createdtasks = new ArrayList<>();
+    private List<Task> createdtasks;
 
     @Setter(AccessLevel.NONE)
     @OneToMany(mappedBy = "comment_author",  orphanRemoval = true)
-    private List<Comment> written_comments = new ArrayList<>();
+    private List<Comment> written_comments;
 
     @ManyToOne()
     @JoinColumn(name = "assigned_board_id")

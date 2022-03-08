@@ -10,31 +10,34 @@ import main.wba_projekt.task.model.TaskStatus;
 import main.wba_projekt.task.repository.CommentRepository;
 import main.wba_projekt.task.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
+@Transactional
 @Service
+@Component
 public class TaskServiceImpl implements TaskService{
 
-    //@Autowired
+    @Autowired
     UserRepository userRepo;
 
-    //@Autowired
+    @Autowired
     TaskRepository taskRepo;
 
-    //@Autowired
+    @Autowired
     CommentRepository commentRepo;
 
-    @Autowired
+    /*@Autowired
     public TaskServiceImpl(UserRepository userRepo, TaskRepository taskRepo, CommentRepository commentRepo){
         this.taskRepo = taskRepo;
         this.commentRepo = commentRepo;
         this.userRepo = userRepo;
-    }
+    }*/
 
     public Task createTask(TaskDTO input) {
         Task task = new Task();
@@ -76,6 +79,7 @@ public class TaskServiceImpl implements TaskService{
         return dto;
     }
 
+
     @Override
     public void addComment(CommentDTO commentInput) {
         Task task = taskRepo.findTaskById(commentInput.getTaskId());
@@ -87,9 +91,7 @@ public class TaskServiceImpl implements TaskService{
         newComment.setCreateDate(LocalDateTime.of(2000,1,1,1,1));
         newComment.setText(commentInput.getText());
 
-        Set<Comment> comments = task.getComments();
-        comments.add(newComment);
-        task.setComments(comments);
+        task.addComments(newComment);
 
         commentRepo.save(newComment);
         taskRepo.save(task);
@@ -111,7 +113,7 @@ public class TaskServiceImpl implements TaskService{
     @Override
     public void deleteTask(TaskDTO input){
         Task task = taskRepo.findTaskById(input.getId());
-        Set<Comment> comments = task.getComments();
+        List<Comment> comments = task.getComments();
 
         for (Comment c:comments){
             commentRepo.delete(c);
