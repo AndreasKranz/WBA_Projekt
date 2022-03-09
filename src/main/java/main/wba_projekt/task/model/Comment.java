@@ -7,7 +7,6 @@ import lombok.ToString;
 import main.wba_projekt.common.BaseEntity;
 import main.wba_projekt.security.model.User;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -26,7 +25,7 @@ public class Comment extends BaseEntity<Long> {
 
 
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne
     @JoinColumn(name = "comment_author_id")
     private User comment_author;
 

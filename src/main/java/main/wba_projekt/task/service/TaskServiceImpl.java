@@ -54,9 +54,9 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public ArrayList<TaskDTO> listAllTasks() {
+    public List<TaskDTO> listAllTasks() {
         List<Task> tasks = taskRepo.findAll();
-        ArrayList<TaskDTO> dtos = new ArrayList<>();
+        List<TaskDTO> dtos = new ArrayList<>();
         for (Task t:tasks){
             dtos.add(castTaskToTaskDTO(t));
         }
@@ -66,7 +66,7 @@ public class TaskServiceImpl implements TaskService{
     private TaskDTO castTaskToTaskDTO(Task task){
         TaskDTO dto = new TaskDTO();
 
-        dto.setTitle(task.getTitle());
+        dto.setTaskTitle(task.getTitle());
         dto.setDescription(task.getDescription());
         dto.setEditDate(task.getEditDate());
         dto.setCreationDate(task.getCreateDate());
@@ -74,7 +74,7 @@ public class TaskServiceImpl implements TaskService{
         dto.setStatus(task.getStatus());
         dto.setAssignedEmail(task.getAssignee().getEmail());
         dto.setAuthorEmail(task.getAuthor().getEmail());
-        dto.setId(task.getId());
+        dto.setTaskId(task.getId());
 
         return dto;
     }
@@ -98,7 +98,7 @@ public class TaskServiceImpl implements TaskService{
     }
 
     public Task editTask(TaskDTO input){
-        Task task = taskRepo.findTaskById(input.getId());
+        Task task = taskRepo.findTaskById(input.getTaskId());
 
         task.setDescription(input.getDescription());
         task.setEditDate(LocalDateTime.now());
@@ -112,7 +112,7 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public void deleteTask(TaskDTO input){
-        Task task = taskRepo.findTaskById(input.getId());
+        Task task = taskRepo.findTaskById(input.getTaskId());
         List<Comment> comments = task.getComments();
 
         for (Comment c:comments){

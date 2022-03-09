@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class TaskController {
@@ -30,7 +30,7 @@ public class TaskController {
     @Autowired
     CommentRepository commentRepo;
 
-    @PostMapping(value = "/task/create", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/task/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createTask(@RequestBody TaskDTO input) {
 
         Task newTask = taskService.createTask(input);
@@ -46,14 +46,15 @@ public class TaskController {
 
     //Unfertig
     @RequestMapping(value = "/tasks", method = {RequestMethod.GET,RequestMethod.POST})
-    public String listAllTask(Model model) {
-        ArrayList<TaskDTO> tasks = taskService.listAllTasks();
-        model.addAttribute("listTaks",tasks);
+    public ResponseEntity<?> listAllTask(Model model) {
+        List<TaskDTO> tasks = taskService.listAllTasks();
+        TaskDTO[] taskArr = tasks.toArray(new TaskDTO[0]);
 
-        return "board";
+
+        return ResponseEntity.status(HttpStatus.OK).body(taskArr);
     }
 
-    @PostMapping(value = "task/edit", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "task/edit", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> editTask(@RequestBody TaskDTO input){
         Task editedTask = taskService.editTask(input);
 
@@ -66,7 +67,7 @@ public class TaskController {
         }
     }
 
-    @PostMapping(value = "task/writecomment", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "task/writecomment", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> writeComment(@RequestBody CommentDTO input){
         taskService.addComment(input);
 

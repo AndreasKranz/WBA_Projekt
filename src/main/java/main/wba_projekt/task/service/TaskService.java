@@ -5,7 +5,7 @@ import main.wba_projekt.task.DTO.TaskDTO;
 import main.wba_projekt.task.model.Task;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Transactional
 public interface TaskService {
@@ -17,7 +17,7 @@ public interface TaskService {
 
     Task editTask(TaskDTO input);
 
-    ArrayList<TaskDTO> listAllTasks();
+    List<TaskDTO> listAllTasks();
 
     void deleteTask(TaskDTO input);
 }

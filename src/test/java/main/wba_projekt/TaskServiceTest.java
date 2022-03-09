@@ -4,9 +4,9 @@ import main.wba_projekt.board.model.Board;
 import main.wba_projekt.board.repository.BoardRepository;
 import main.wba_projekt.security.model.User;
 import main.wba_projekt.security.repository.UserRepository;
-import main.wba_projekt.task.DTO.CommentDTO;
-import main.wba_projekt.task.model.Comment;
+import main.wba_projekt.task.DTO.TaskDTO;
 import main.wba_projekt.task.model.Task;
+import main.wba_projekt.task.model.TaskStatus;
 import main.wba_projekt.task.repository.CommentRepository;
 import main.wba_projekt.task.repository.TaskRepository;
 import main.wba_projekt.task.service.TaskService;
@@ -19,8 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 //@DataJpaTest
 @SpringBootTest
@@ -59,15 +57,17 @@ public class TaskServiceTest {
 
 
         Task task = new Task();
-        task.setTitle("Beispiel");
+        task.setTitle("Date");
         User temp = userRepo.findByEmail("hans@fritz.com");
         task.setAssignee(temp);
         task.setAuthor(userRepo.findByEmail("hans@fritz.com"));
         task.setBoard(board);
+        task.setCreateDate(LocalDateTime.now());
+        task.setStatus(TaskStatus.DONE);
 
         userRepo.save(temp);
         taskRepo.save(task);
-        Long id = task.getId();
+        /*Long id = task.getId();
 
         CommentDTO dto = new CommentDTO();
         dto.setAuthorEmail("hans@fritz.com");
@@ -90,7 +90,13 @@ public class TaskServiceTest {
         List<Comment> list =  taskRepo.findTaskById(id).getComments();
         Comment comp = list.get(0);
 
-        assertThat(comp).isEqualTo(comment);
+        assertThat(comp).isEqualTo(comment);*/
+
+        List<TaskDTO> list = service.listAllTasks();
+
+        for (TaskDTO t:list){
+            System.out.println(t);
+        }
 
     }
 
