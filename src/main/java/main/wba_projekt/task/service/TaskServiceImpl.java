@@ -41,7 +41,7 @@ public class TaskServiceImpl implements TaskService{
         task.setAssignee(userRepo.findByEmail(input.getAssignedEmail()));
         task.setCreateDate(input.getCreationDate());
         task.setEditDate(input.getCreationDate());
-        task.setDescription(input.getDescription());
+        task.setDescription(input.getTdescription());
         task.setStatus(TaskStatus.BACKLOG);
         task.setPriority(TaskPriority.NORMAL);
 
@@ -70,10 +70,10 @@ public class TaskServiceImpl implements TaskService{
         TaskDTO dto = new TaskDTO();
 
         dto.setTaskTitle(task.getTitle());
-        dto.setDescription(task.getDescription());
+        dto.setTdescription(task.getDescription());
         dto.setEditDate(task.getEditDate());
         dto.setCreationDate(task.getCreateDate());
-        dto.setPriority(task.getPriority());
+        dto.setTPriority(task.getPriority());
         dto.setStatus(task.getStatus());
         dto.setAssignedEmail(task.getAssignee().getEmail());
         dto.setAuthorEmail(task.getAuthor().getEmail());
@@ -127,12 +127,12 @@ public class TaskServiceImpl implements TaskService{
     public Task editTask(TaskDTO input){
         Task task = taskRepo.findTaskById(input.getTaskId());
 
-        task.setDescription(input.getDescription());
+        task.setDescription(input.getTdescription());
         task.setEditDate(LocalDateTime.now());
         task.setAssignee(userRepo.findByEmail(input.getAssignedEmail()));
-        task.setPriority(input.getPriority());
+        task.setPriority(input.getTPriority());
         task.setStatus(input.getStatus());
-        task.setPriority(input.getPriority());
+        task.setPriority(input.getTPriority());
 
         return task;
     }

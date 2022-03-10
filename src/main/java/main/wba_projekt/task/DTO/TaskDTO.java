@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 @ToString
 public class TaskDTO {
 
-    String taskTitle, description, authorEmail, assignedEmail;
+    String taskTitle, tdescription, authorEmail, assignedEmail;
     LocalDateTime creationDate, editDate;
-    TaskPriority priority;
+    TaskPriority tPriority;
     TaskStatus status;
     Long taskId;
 
