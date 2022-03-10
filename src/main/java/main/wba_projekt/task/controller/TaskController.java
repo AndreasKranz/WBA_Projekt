@@ -83,4 +83,22 @@ public class TaskController {
 
     }
 
+    @RequestMapping(value = "/task/{id}/", method = {RequestMethod.GET,RequestMethod.POST})
+    public ResponseEntity<?> getTask(@PathVariable String id){
+        Long taskId = Long.valueOf(id);
+
+        TaskDTO dto = taskService.getTask(taskId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
+    }
+
+    @RequestMapping(value = "/task/{id}/comments",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> listComments(@PathVariable String id){
+        Long taskId = Long.valueOf(id);
+
+        CommentDTO[] dtos = taskService.listAllComments(taskId).toArray(new CommentDTO[0]);
+
+        return ResponseEntity.status(HttpStatus.OK).body(dtos);
+    }
+
 }

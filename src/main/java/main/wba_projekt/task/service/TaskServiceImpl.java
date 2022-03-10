@@ -32,12 +32,7 @@ public class TaskServiceImpl implements TaskService{
     @Autowired
     CommentRepository commentRepo;
 
-    /*@Autowired
-    public TaskServiceImpl(UserRepository userRepo, TaskRepository taskRepo, CommentRepository commentRepo){
-        this.taskRepo = taskRepo;
-        this.commentRepo = commentRepo;
-        this.userRepo = userRepo;
-    }*/
+
 
     public Task createTask(TaskDTO input) {
         Task task = new Task();
@@ -63,6 +58,14 @@ public class TaskServiceImpl implements TaskService{
         return dtos;
     }
 
+    @Override
+    public TaskDTO getTask(Long id) {
+        Task task = taskRepo.findTaskById(id);
+        TaskDTO dto = castTaskToTaskDTO(task);
+
+            return dto;
+    }
+
     private TaskDTO castTaskToTaskDTO(Task task){
         TaskDTO dto = new TaskDTO();
 
@@ -79,6 +82,30 @@ public class TaskServiceImpl implements TaskService{
         return dto;
     }
 
+    @Override
+    public List<CommentDTO> listAllComments(Long taskId) {
+        Task task = taskRepo.findTaskById(taskId);
+
+        List<Comment> comments = task.getComments();
+        List<CommentDTO> dtos = new ArrayList<>();
+
+        for (Comment c:comments){
+            dtos.add(castCommentToCommentDTO(c));
+        }
+        return dtos;
+    }
+
+    private CommentDTO castCommentToCommentDTO(Comment input){
+        CommentDTO cDto = new CommentDTO();
+
+        cDto.setTaskId(input.getTask().getId());
+        cDto.setText(input.getText());
+        cDto.setAuthorEmail(input.getComment_author().getEmail());
+        cDto.setId(cDto.getId());
+        cDto.setCreateDateTime(input.getCreateDate());
+
+        return cDto;
+    }
 
     @Override
     public void addComment(CommentDTO commentInput) {

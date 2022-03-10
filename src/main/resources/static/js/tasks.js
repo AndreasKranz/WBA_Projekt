@@ -78,18 +78,20 @@ async function createTaskTable() {
     tbody.appendChild(row_2);
 
 
-    document.getElementById('body').appendChild(table)
+    document.getElementById('tableSpace').appendChild(table)
 
     function addToColoumn(td, arr) {
         let ul = document.createElement('ul');
 
         for (let i = 0; i < arr.length; i++) {
             let assignee = arr[i].assignedEmail;
-            let id = arr[i].taskId;
+            let taskId = arr[i].taskId;
             let title = arr[i].taskTitle;
 
+            let button = "<button onclick=\"drawTask(" + taskId + ")\">show Details</button>"
+
             let li = document.createElement('li');
-            li.innerHTML = id + "<br/>" + title + "<br/>" + assignee;
+            li.innerHTML = taskId + button + "<br/>" + title + "<br/>" + assignee;
             ul.appendChild(li);
             console.log(li);
 
@@ -128,3 +130,54 @@ async function createTaskTable() {
 
 }
 
+async function drawTask(taskId){
+    const url = "http://localhost:8080/task/" + taskId+"/";
+
+    let json;
+
+    try {
+        const responsePromise = await fetch(url);
+        if(!responsePromise.ok){
+            throw new Error("Error! status: ${response.status}");
+        }
+        json = await responsePromise.json();
+    } catch (err) {
+        console.error(err);
+    }
+
+    let div = document.createElement('div');
+    let pTitle = document.createElement('p');
+    pTitle.innerHTML = json.taskTitle;
+    let pText = document.createElement('p');
+    pText.innerHTML = json.description;
+    let pAuthor = document.createElement('p');
+    pAuthor.innerHTML = "Author: "+json.authorEmail;
+    let pId = document.createElement('p');
+    pId.innerHTML = json.taskId;
+    let pStatus = document.createElement('p');
+    pStatus.innerHTML = json.status;
+    let pPrio = document.createElement('p');
+    pPrio.innerHTML = "Priority: "+json.priority;
+    let pAssignee = document.createElement('p');
+    pAssignee.innerHTML = "Assignee: "+json.assignedEmail;
+    let pCreateDate = document.createElement('p');
+    pCreateDate.innerHTML = "created: "+json.creationDate;
+    let pEditDate = document.createElement('p');
+    pEditDate.innerHTML = "edited: "+json.editDate;
+
+    div.appendChild(pId);
+    div.appendChild(pTitle);
+    div.appendChild(pAssignee);
+    div.appendChild(pAuthor);
+    div.appendChild(pText);
+    div.appendChild(pStatus);
+    div.appendChild(pPrio);
+    div.appendChild(pCreateDate);
+    div.appendChild(pEditDate);
+
+    document.getElementById("taskSpace").appendChild(div);
+}
+
+async function drawComments(taskId){
+
+}
