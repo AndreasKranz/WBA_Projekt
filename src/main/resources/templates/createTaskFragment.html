@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div id="createTask">
+    <form id="createTaskForm" name="createTaskForm">
+        <label for="taskTitle">Task title: </label>
+        <input type="text" id="taskTitle" name="taskTitle" placeholder="title"><br>
+        <label for="taskText" >Task description: </label>
+        <input type="text" id="taskText" name="taskText" placeholder="description"><br>
+        <label for="taskAssignee" >Assignee Email: </label>
+        <input type="text" id="taskAssignee" name="taskAssignee" placeholder="user@example.com"><br>
+        <label for="taskPriority" >Priority: </label>
+        <select name="taskPriority" id="taskPriority">
+            <option value="NORMAL">NORMAL</option>
+            <option value="LOW">LOW</option>
+            <option value="HIGH">HIGH</option>
+        </select>
+    </form>
+    <button id="btnCreate">Save Task</button>
+
+</div>
+</html>

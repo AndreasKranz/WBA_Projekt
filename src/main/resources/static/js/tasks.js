@@ -1,4 +1,5 @@
 async function createTaskTable() {
+    document.getElementById("btnCreateForm").addEventListener('click', () =>drawTaskForm());
     const url = 'http://localhost:8080/tasks';
 
     let json;
@@ -88,12 +89,18 @@ async function createTaskTable() {
             let taskId = arr[i].taskId;
             let title = arr[i].taskTitle;
 
-            let button = "<button onclick=\"drawTask(" + taskId + ")\">show Details</button>"
+            //let button = "<button onclick=\"drawTask(" + taskId + ")\" id='btnDetails' name='btnDetails'>show Details</button>"
+            let btn = document.createElement('button');
+            btn.id = "btnDetails";
+            btn.name = "btnDetails";
+            btn.innerHTML = "Show Details";
+            btn.addEventListener('click', () => drawTask(taskId));
 
             let li = document.createElement('li');
-            li.innerHTML = taskId + button + "<br/>" + title + "<br/>" + assignee;
+            li.innerHTML = taskId + "<br/>" + title + "<br/>" + assignee;
+            li.appendChild(btn);
             ul.appendChild(li);
-            console.log(li);
+
 
         }
         td.appendChild(ul);
@@ -118,7 +125,7 @@ async function createTaskTable() {
                 arrReview.push(dto);
                 break;
             case "DONE":
-                arrHold.push(dto);
+                arrDone.push(dto);
                 break;
             default:
                 console.log("ALLLA IST KEIN ENUM WERT"); //TODO sinnvolle Meldung
@@ -155,12 +162,12 @@ async function drawTask(taskId) {
     taskForm.id = "taskForm";
 
     let inputTitle = document.createElement('input');
-    inputTitle.id = "taskTitle";
-    inputTitle.name = "taskTitle";
+    inputTitle.id = "tTitle";
+    inputTitle.name = "tTitle";
     inputTitle.type = "text";
     inputTitle.defaultValue = json.taskTitle;
     let lblTitle = document.createElement('label');
-    lblTitle.htmlFor = "taskTitle";
+    lblTitle.htmlFor = "tTitle";
     lblTitle.innerHTML = "Title:";
 
 
@@ -172,16 +179,6 @@ async function drawTask(taskId) {
     let lblText = document.createElement('label');
     lblText.htmlFor = "tDescription"
     lblText.innerHTML = "Description:";
-
-
-    let inputAuthor = document.createElement('input');
-    inputAuthor.id = "authorEmail";
-    inputAuthor.name = "authorEmail"
-    inputAuthor.type = "text";
-    inputAuthor.defaultValue = json.authorEmail;
-    let lblAuthor = document.createElement('label');
-    lblAuthor.htmlFor = "authorEmail";
-    lblAuthor.innerHTML = "Author:";
 
     let inputAssignee = document.createElement('input');
     inputAssignee.id = "assignedEmail";
@@ -195,8 +192,6 @@ async function drawTask(taskId) {
 
     taskForm.appendChild(lblTitle);
     taskForm.appendChild(inputTitle);
-    taskForm.appendChild(lblAuthor);
-    taskForm.appendChild(inputAuthor);
     taskForm.appendChild(lblAssignee);
     taskForm.appendChild(inputAssignee);
     taskForm.appendChild(lblText);
@@ -204,7 +199,6 @@ async function drawTask(taskId) {
 
 
     //Todo Funktion die Werte mit getelement nimmt
-
 
 
     let selectStatus = document.createElement('select');
@@ -265,7 +259,6 @@ async function drawTask(taskId) {
     //Todo an richtige Stelle verschieben
 
 
-
     let selectPrio = document.createElement('select');
     selectPrio.id = "tPriority";
     selectPrio.name = "tPriority";
@@ -306,11 +299,13 @@ async function drawTask(taskId) {
     //Todo an richtige Stelle verschieben
 
 
-
-
-
+    let pAuthor = document.createElement('p');
+    pAuthor.id = "authorEmail";
+    pAuthor.name = "authorEmail"
+    pAuthor.innerHTML = "Author: " + json.authorEmail;
 
     let pId = document.createElement('p');
+    pId.id = "pId";
     pId.innerHTML = json.taskId;
     let pCreateDate = document.createElement('p');
     pCreateDate.innerHTML = "created: " + json.creationDate;
@@ -319,9 +314,10 @@ async function drawTask(taskId) {
 
 
     let btnSave = document.createElement('button');
-    btnSave.onclick = saveEdits();
+    btnSave.id = "btnSave";
+    btnSave.name = "btnSave";
     btnSave.innerHTML = "Save Changes";
-
+    btnSave.addEventListener('click',()=>saveEdits());
 
 
     div.appendChild(pId);
@@ -329,19 +325,19 @@ async function drawTask(taskId) {
     div.appendChild(br);
     div.appendChild(selectPrio);
     div.appendChild(taskForm);
+    div.appendChild(pAuthor);
     div.appendChild(pCreateDate);
     div.appendChild(pEditDate);
     div.appendChild(btnSave);
 
-
-    //document.getElementById('tPriority').selectedIndex = selectedPriority;
-    //document.getElementById("status").selectedIndex = selectedStatus;
+    document.getElementById("taskSpace").innerHTML ="";
     document.getElementById("taskSpace").appendChild(div);
 
-    setDropDowns(json.tPriority,json.status);
+    setDropDowns(json.tPriority, json.status);
+
 }
 
-function setDropDowns(prio,status){
+function setDropDowns(prio, status) {
 
     let selectedStatus;
     switch (status) {
@@ -384,19 +380,113 @@ function setDropDowns(prio,status){
             break;
     }
     document.getElementById('tPriority').selectedIndex = selectedPriority;
+
+
 }
 
 
+async function saveEdits() {
 
-function saveEdits() {
+    let taskTitleValue = document.getElementById("tTitle").value;
+    let descriptionValue = document.getElementById("tDescription").value;
+    let assignedEmailValue = document.getElementById("assignedEmail").value;
+    let priorityValue = document.getElementById("tPriority").value;
+    let statusValue = document.getElementById("status").value;
+    let temp = document.getElementById("pId").innerHTML;
+    let taskIdValue = new Number(temp);
+
+    const obj = {
+        taskTitle: taskTitleValue,
+        tdescription: descriptionValue,
+        assignedEmail: assignedEmailValue,
+        tpriority: priorityValue,
+        status: statusValue,
+        taskId: taskIdValue,
+    }
+
+    let payload = JSON.stringify(obj);
+
+    const url = 'http://localhost:8080/task/edit';
+
+    let res;
+
+    try {
+        const responsePromise = await fetch(url,{
+            method: 'POST',
+            credentials : 'include',
+            headers : {
+                'Content-Type': 'application/json'
+            },
+            body: payload
+        })
+        if (!responsePromise.ok) {
+            throw new Error("Error! status: ${response.status}");
+        }
+        res = await responsePromise.json();
+        console.log(res);
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+async function drawTaskForm() {
+    const url = "http://localhost:8080/taskform";
+    let res;
+    try {
+        const responsePromise = await fetch(url)
+        if (!responsePromise.ok) {
+            throw new Error("Error! status: ${response.status}");
+        }
+        res = await responsePromise.text();
+        console.log(res);
+    } catch (err) {
+        console.log(err);
+    }
+    document.getElementById("taskSpace").innerHTML = res;
+
+    document.getElementById("btnCreate").addEventListener('click',()=>createTask());
 
 
-    /*let status = document.getElementById("status").value;
-    let tpriority = document.getElementById("tPriority").value;
-    let taskTitle = document.getElementById("title").value;
-    let tdescription = document.getElementById("tDescription").value;
-    let assignedEmail =document.getElementById("assignedEmail").value;
-*/
+}
+
+async function createTask(){
+
+    let title = document.getElementById("taskTitle").value;
+    let description = document.getElementById("taskText").value;
+    let assignee =document.getElementById("taskAssignee").value;
+    let prio = document.getElementById("taskPriority").value;
+
+    let obj = {
+        taskTitle: title,
+        tdescription: description,
+        assignedEmail: assignee,
+        tpriority: prio,
+    }
+
+    let createPayload = JSON.stringify(obj);
+
+    const url1 = 'http://localhost:8080/task/create';
+
+    let res1;
+
+    try {
+        const responsePromise = await fetch(url1,{
+            method: 'POST',
+            credentials : 'include',
+            headers : {
+                'Content-Type': 'application/json'
+            },
+            body: createPayload
+        })
+        if (!responsePromise.ok) {
+            throw new Error("Error! status: ${response.status}");
+        }
+        res1 = await responsePromise.json();
+        console.log(res1);
+    } catch (err) {
+        console.log(err);
+    }
 
 
 }

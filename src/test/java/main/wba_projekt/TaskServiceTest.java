@@ -1,12 +1,7 @@
 package main.wba_projekt;
 
-import main.wba_projekt.board.model.Board;
 import main.wba_projekt.board.repository.BoardRepository;
-import main.wba_projekt.security.model.User;
 import main.wba_projekt.security.repository.UserRepository;
-import main.wba_projekt.task.DTO.TaskDTO;
-import main.wba_projekt.task.model.Task;
-import main.wba_projekt.task.model.TaskStatus;
 import main.wba_projekt.task.repository.CommentRepository;
 import main.wba_projekt.task.repository.TaskRepository;
 import main.wba_projekt.task.service.TaskService;
@@ -16,9 +11,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 //@DataJpaTest
 @SpringBootTest
@@ -50,13 +42,9 @@ public class TaskServiceTest {
     @Test
     public void testAddComment(){
 
-        Board board = new Board();
-        board.setTitle("gaa");
-
-        boardRepo.save(board);
 
 
-        Task task = new Task();
+        /*Task task = new Task();
         task.setTitle("Date");
         User temp = userRepo.findByEmail("hans@fritz.com");
         task.setAssignee(temp);
@@ -66,7 +54,7 @@ public class TaskServiceTest {
         task.setStatus(TaskStatus.DONE);
 
         userRepo.save(temp);
-        taskRepo.save(task);
+        taskRepo.save(task);*/
         /*Long id = task.getId();
 
         CommentDTO dto = new CommentDTO();
@@ -92,11 +80,11 @@ public class TaskServiceTest {
 
         assertThat(comp).isEqualTo(comment);*/
 
-        List<TaskDTO> list = service.listAllTasks();
+        /*List<TaskDTO> list = service.listAllTasks();
 
         for (TaskDTO t:list){
             System.out.println(t);
-        }
+        }*/
 
     }
 

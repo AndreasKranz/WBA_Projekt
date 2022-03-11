@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Kanbanboard</title>
     <script th:src="@{/js/tasks.js}"></script>
 </head>
-<body id="body">
+<body id="body" onload="createTaskTable()">
 
 
 <div>
-    <button onclick="createTaskTable()">draw table</button>
+    <button id="btnCreateForm" name="btnCreateForm">Create a task</button>
+    <form th:action="@{/users}" method="GET">
+        <input type="submit" value="Users">
+    </form>
 </div>
 
 <div id="main" >

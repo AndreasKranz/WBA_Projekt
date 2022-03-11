@@ -10,5 +10,5 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Query("select t FROM Task t WHERE t.id =?1")
     Task findTaskById(Long id);
-    //TODO implementieren
+
 }
