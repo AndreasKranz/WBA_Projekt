@@ -1,9 +1,8 @@
 async function createTaskTable() {
-    document.getElementById("btnCreateForm").addEventListener('click', () =>drawTaskForm());
+    document.getElementById("btnCreateForm").addEventListener('click', () => drawTaskForm());
     const url = 'http://localhost:8080/tasks';
 
     let json;
-
     try {
         const responsePromise = await fetch(url)
         if (!responsePromise.ok) {
@@ -14,7 +13,6 @@ async function createTaskTable() {
         console.log(err);
     }
 
-
     const arrHold = [];
     const arrSprintBack = [];
     const arrBacklog = [];
@@ -24,8 +22,7 @@ async function createTaskTable() {
 
     json.forEach(addToArray)
 
-
-    let table = document.createElement('table');
+    /*let table = document.createElement('table');
     let thead = document.createElement('thead');
     let tbody = document.createElement('tbody');
 
@@ -55,34 +52,41 @@ async function createTaskTable() {
     tbody.appendChild(row_1);
 
     let row_2 = document.createElement('tr');
-
-    let td_onHold = document.createElement('td');
+*/
+    //let td_onHold = document.createElement('td');
+    let td_onHold = document.getElementById("tdHold");
     addToColoumn(td_onHold, arrHold);
-    let td_backlog = document.createElement('td');
+    //let td_backlog = document.createElement('td');
+    let td_backlog = document.getElementById("tdBacklog");
     addToColoumn(td_backlog, arrBacklog);
-    let td_sprintBack = document.createElement('td');
+    //let td_sprintBack = document.createElement('td');
+    let td_sprintBack = document.getElementById("tdSprint");
     addToColoumn(td_sprintBack, arrSprintBack);
-    let td_progress = document.createElement('td');
+    //let td_progress = document.createElement('td');
+    let td_progress = document.getElementById("tdProgress");
     addToColoumn(td_progress, arrProgress);
-    let td_review = document.createElement('td');
+    //let td_review = document.createElement('td');
+    let td_review = document.getElementById("tdReview");
     addToColoumn(td_review, arrReview);
-    let td_done = document.createElement('td');
+    //let td_done = document.createElement('td');
+    let td_done = document.getElementById("tdDone");
     addToColoumn(td_done, arrDone);
 
-    row_2.appendChild(td_onHold);
-    row_2.appendChild(td_backlog);
-    row_2.appendChild(td_sprintBack);
-    row_2.appendChild(td_progress);
-    row_2.appendChild(td_review);
-    row_2.appendChild(td_done);
+    /*    row_2.appendChild(td_onHold);
+        row_2.appendChild(td_backlog);
+        row_2.appendChild(td_sprintBack);
+        row_2.appendChild(td_progress);
+        row_2.appendChild(td_review);
+        row_2.appendChild(td_done);
 
-    tbody.appendChild(row_2);
+        tbody.appendChild(row_2);
 
 
-    document.getElementById('tableSpace').appendChild(table)
-
+        document.getElementById('tableSpace').appendChild(table)
+    */
     function addToColoumn(td, arr) {
         let ul = document.createElement('ul');
+        //let ul = td.firstChild;
 
         for (let i = 0; i < arr.length; i++) {
             let assignee = arr[i].assignedEmail;
@@ -91,7 +95,7 @@ async function createTaskTable() {
 
             //let button = "<button onclick=\"drawTask(" + taskId + ")\" id='btnDetails' name='btnDetails'>show Details</button>"
             let btn = document.createElement('button');
-            btn.id = "btnDetails";
+            //btn.id = "btnDetails";
             btn.name = "btnDetails";
             btn.innerHTML = "Show Details";
             btn.addEventListener('click', () => drawTask(taskId));
@@ -128,20 +132,15 @@ async function createTaskTable() {
                 arrDone.push(dto);
                 break;
             default:
-                console.log("ALLLA IST KEIN ENUM WERT"); //TODO sinnvolle Meldung
+                console.log("VALUE NOT DEFINED");
         }
-
-
     }
-
-
 }
 
 async function drawTask(taskId) {
     const url = "http://localhost:8080/task/" + taskId + "/";
 
     let json;
-
     try {
         const responsePromise = await fetch(url);
         if (!responsePromise.ok) {
@@ -152,43 +151,62 @@ async function drawTask(taskId) {
         console.error(err);
     }
 
-    let br = document.createElement('br');
-    //Edit and Display
+    const url1 = "http://localhost:8080/taskDetails";
+
+    let resValue;
+    try {
+        const responsePromise = await fetch(url1);
+        if(!responsePromise.ok){
+            throw new Error("Error! status: {response.status}");
+        }
+        resValue = await responsePromise.text();
+    } catch (err){
+        console.log(err);
+    }
+
+    document.getElementById("taskDetails").innerHTML ="";
+    document.getElementById("taskDetails").innerHTML = resValue;
+
+
+
+    /*let br = document.createElement('br');
 
     let div = document.createElement('div');
     div.id = "editTask";
 
     let taskForm = document.createElement('form');
     taskForm.id = "taskForm";
-
-    let inputTitle = document.createElement('input');
-    inputTitle.id = "tTitle";
-    inputTitle.name = "tTitle";
-    inputTitle.type = "text";
+    */
+    //let inputTitle = document.createElement('input');
+    let inputTitle = document.getElementById("tTitle");
+    //inputTitle.id = "tTitle";
+    //inputTitle.name = "tTitle";
+    //inputTitle.type = "text";
     inputTitle.defaultValue = json.taskTitle;
-    let lblTitle = document.createElement('label');
+   /* let lblTitle = document.createElement('label');
     lblTitle.htmlFor = "tTitle";
     lblTitle.innerHTML = "Title:";
 
 
-    let inputText = document.createElement('input');
-    inputText.id = "tDescription";
-    inputTitle.name = "tDescription";
-    inputText.type = "text";
-    inputText.defaultValue = json.tDescription;
-    let lblText = document.createElement('label');
+    let inputText = document.createElement('input');*/
+    let inputText =document.getElementById("tDescription");
+    //inputText.id = "tDescription";
+    //inputTitle.name = "tDescription";
+    //inputText.type = "text";
+    inputText.defaultValue = json.tdescription;
+    /*let lblText = document.createElement('label');
     lblText.htmlFor = "tDescription"
     lblText.innerHTML = "Description:";
 
     let inputAssignee = document.createElement('input');
     inputAssignee.id = "assignedEmail";
     inputAssignee.name = "assignedEmail";
-    inputAssignee.type = "text";
+    inputAssignee.type = "text";*/
+    let inputAssignee = document.getElementById("assignedEmail")
     inputAssignee.defaultValue = json.assignedEmail;
-    let lblAssignee = document.createElement('label');
+    /*let lblAssignee = document.createElement('label');
     lblAssignee.htmlFor = "assignedEmail";
     lblAssignee.innerHTML = "Assignee: ";
-
 
     taskForm.appendChild(lblTitle);
     taskForm.appendChild(inputTitle);
@@ -196,9 +214,6 @@ async function drawTask(taskId) {
     taskForm.appendChild(inputAssignee);
     taskForm.appendChild(lblText);
     taskForm.appendChild(inputText);
-
-
-    //Todo Funktion die Werte mit getelement nimmt
 
 
     let selectStatus = document.createElement('select');
@@ -256,7 +271,7 @@ async function drawTask(taskId) {
         default:
             selectedStatus = 1;
     }
-    //Todo an richtige Stelle verschieben
+
 
 
     let selectPrio = document.createElement('select');
@@ -296,31 +311,34 @@ async function drawTask(taskId) {
             break;
     }
 
-    //Todo an richtige Stelle verschieben
-
 
     let pAuthor = document.createElement('p');
     pAuthor.id = "authorEmail";
-    pAuthor.name = "authorEmail"
-    pAuthor.innerHTML = "Author: " + json.authorEmail;
+    pAuthor.name = "authorEmail"*/
+    let pAuthor =document.getElementById("pAuthor");
+    pAuthor.innerHTML += json.authorEmail;
 
-    let pId = document.createElement('p');
-    pId.id = "pId";
-    pId.innerHTML = json.taskId;
-    let pCreateDate = document.createElement('p');
-    pCreateDate.innerHTML = "created: " + json.creationDate;
-    let pEditDate = document.createElement('p');
-    pEditDate.innerHTML = "edited: " + json.editDate;
+    /*let pId = document.createElement('p');
+    pId.id = "pId";*/
+    let hId = document.getElementById("hTaskId");
+    hId.innerHTML = json.taskId;
+    //let pCreateDate = document.createElement('p');
+    let pCreateDate = document.getElementById("pCreated");
+    pCreateDate.innerHTML += json.creationDate;
+    //let pEditDate = document.createElement('p');
+    let pEditDate = document.getElementById("pEdited");
+    pEditDate.innerHTML += json.editDate;
 
 
-    let btnSave = document.createElement('button');
+    /*let btnSave = document.createElement('button');
     btnSave.id = "btnSave";
     btnSave.name = "btnSave";
-    btnSave.innerHTML = "Save Changes";
+    btnSave.innerHTML = "Save Changes";*/
+    let btnSave = document.getElementById("btnSaveTask");
     btnSave.addEventListener('click',()=>saveEdits());
 
 
-    div.appendChild(pId);
+    /*div.appendChild(pId);
     div.appendChild(selectStatus);
     div.appendChild(br);
     div.appendChild(selectPrio);
@@ -328,12 +346,100 @@ async function drawTask(taskId) {
     div.appendChild(pAuthor);
     div.appendChild(pCreateDate);
     div.appendChild(pEditDate);
-    div.appendChild(btnSave);
+    div.appendChild(btnSave);*/
 
-    document.getElementById("taskSpace").innerHTML ="";
-    document.getElementById("taskSpace").appendChild(div);
+    //document.getElementById("taskDetails").innerHTML ="";
+    //document.getElementById("taskDetails").appendChild(div);
+    await drawComments(taskId);
 
-    setDropDowns(json.tPriority, json.status);
+
+    setDropDowns(json.tpriority, json.status);
+
+}
+
+async function drawComments(taskId) {
+    const urlCommentDoc = "http://localhost:8080/commentDoc";
+
+
+    /*let resComDoc;
+    try {
+        const responsePromise = await fetch(urlCommentDoc)
+        if (!responsePromise.ok) {
+            throw new Error("Error! status: ${response.status}");
+        }
+        resComDoc = await responsePromise.text();
+        console.log(resComDoc);
+    } catch (err) {
+        console.log(err);
+    }
+
+
+
+    document.getElementById("commentsSpace").innerHTML = resComDoc;
+*/
+    const urlComments = "http://localhost:8080/task/" + taskId + "/comments";
+    let json;
+    try {
+        const responsePromise = await fetch(urlComments)
+        if (!responsePromise.ok) {
+            throw new Error("Error! status: ${response.status}");
+        }
+        json = await responsePromise.json();
+    } catch (err){
+        console.log(err);
+    }
+
+    let ul = document.getElementById("commentList");
+    let li ;//= document.createElement('li');
+
+    json.forEach(commentToLi);
+
+    function commentToLi(dto){
+        li = document.createElement('li');
+        li.innerHTML = "Author : " + dto.authorEmail + "<br>" + "Comment: " + dto.text  + "<br>" + "Created: " + dto.createDateTime;
+        ul.appendChild(li);
+    }
+
+    document.getElementById("btnComment").addEventListener('click',()=> writeComment(taskId));
+}
+
+async function writeComment(idTask){
+    const url = "http://localhost:8080/task/writecomment";
+    const url1 = "http://localhost:8080/username";
+
+    let commentText = document.getElementById("commentInput").value;
+
+
+    const obj = {
+        text : commentText,
+        taskId: idTask,
+    }
+
+    let commentPayload = JSON.stringify(obj);
+
+    let res;
+
+    try {
+        const responsePromise = fetch(url,{
+            method: 'POST',
+            credentials: 'include',
+            headers : {
+                'Content-Type': 'application/json'
+            },
+            body: commentPayload
+        })
+        if(responsePromise === null){
+            throw new Error()
+        }
+        if(!responsePromise.ok){
+            throw new Error()
+        }
+        res = await responsePromise.json();
+        console.log(res);
+    }catch (err){
+        console.log(err)
+    }
+
 
 }
 
@@ -362,7 +468,7 @@ function setDropDowns(prio, status) {
         default:
             selectedStatus = 1;
     }
-    document.getElementById("status").selectedIndex = selectedStatus;
+    document.getElementById("selectStatus").selectedIndex = selectedStatus;
 
     let selectedPriority;
     switch (prio) {
@@ -379,7 +485,7 @@ function setDropDowns(prio, status) {
             selectedPriority = 0;
             break;
     }
-    document.getElementById('tPriority').selectedIndex = selectedPriority;
+    document.getElementById('selectPrio').selectedIndex = selectedPriority;
 
 
 }
@@ -443,7 +549,7 @@ async function drawTaskForm() {
     } catch (err) {
         console.log(err);
     }
-    document.getElementById("taskSpace").innerHTML = res;
+    document.getElementById("taskDetails").innerHTML = res;
 
     document.getElementById("btnCreate").addEventListener('click',()=>createTask());
 
@@ -491,6 +597,4 @@ async function createTask(){
 
 }
 
-async function drawComments(taskId) {
 
-}

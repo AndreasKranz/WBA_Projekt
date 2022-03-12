@@ -1,6 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<!-- TODO Kommentierfragment bauen boy
+<div id="commentFragment">
+    <h4 style="color: aqua">Comments: </h4>
+    <ul id="commentList" name="commentList">
+    </ul>
+    <br>
+    <form id="commentForm">
+        <input type="text" id="commentInput" name="commentInput" value="comment">
+        <button id="btnComment" name="btnComment">Save Comment</button>
+    </form>
 
+</div>
 </html>

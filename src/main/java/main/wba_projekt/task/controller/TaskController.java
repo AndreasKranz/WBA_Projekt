@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,9 +58,20 @@ public class TaskController {
         return "createTaskFragment";
     }
 
-    //Unfertig
+    @RequestMapping("/commentDoc")
+    public String retrieveCommentDoc(){
+        return "commentsFragment";
+    }
+
+    @RequestMapping("/taskDetails")
+    public String retrieveTaskDetails(){
+        return "taskDetailsFragment";
+    }
+
+
+
     @RequestMapping(value = "/tasks", method = {RequestMethod.GET,RequestMethod.POST})
-    public ResponseEntity<?> listAllTask(Model model) {
+    public ResponseEntity<?> listAllTask() {
         List<TaskDTO> tasks = taskService.listAllTasks();
         TaskDTO[] taskArr = tasks.toArray(new TaskDTO[0]);
 
@@ -85,8 +95,10 @@ public class TaskController {
     }
 
 
-    @PostMapping(value = "task/writecomment", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> writeComment(@RequestBody CommentDTO input){
+    @PostMapping(value = "/task/writecomment", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> writeComment(@RequestBody CommentDTO input, HttpServletRequest request){
+        String commentAuthor = request.getUserPrincipal().getName();
+        input.setAuthorEmail(commentAuthor);
         taskService.addComment(input);
 
 
@@ -99,7 +111,7 @@ public class TaskController {
         log.debug("Principal ->" + principal.getName());
     }
 
-    @DeleteMapping("task/delete")
+    @DeleteMapping("/task/delete")
     public ResponseEntity<?> deleteTask(@RequestBody TaskDTO input){
         taskService.deleteTask(input);
 
@@ -116,13 +128,15 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
-    @RequestMapping(value = "/task/{id}/comments",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> listComments(@PathVariable String id){
+
+    @GetMapping(value = "/task/{id}/comments")
+    public ResponseEntity<?> test(@PathVariable String id){
         Long taskId = Long.valueOf(id);
+        List<CommentDTO> dtos = taskService.listAllComments(taskId);
 
-        CommentDTO[] dtos = taskService.listAllComments(taskId).toArray(new CommentDTO[0]);
+        CommentDTO[] payload = dtos.toArray(new CommentDTO[0]);
 
-        return ResponseEntity.status(HttpStatus.OK).body(dtos);
+        return ResponseEntity.status(HttpStatus.OK).body(payload);
     }
 
 }

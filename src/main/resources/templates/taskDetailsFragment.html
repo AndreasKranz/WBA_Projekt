@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div id="editTask">
+    <h4 id="hTaskId"></h4>
+    <form>
+        <label for="selectStatus">Status:</label>
+        <select id="selectStatus">
+            <option value="ON_HOLD">ON_HOLD</option>
+            <option value="BACKLOG">BACKLOG</option>
+            <option value="SPRINT_BACKLOG">SPRINT_BACKLOG</option>
+            <option value="IN_PROGRESS">IN_PROGRESS</option>
+            <option value="UNDER_REVIEW">UNDER_REVIEW</option>
+            <option value="DONE">DONE</option>
+        </select>
+        <br>
+        <label for="selectPrio">Priority:</label>
+        <select id="selectPrio">
+            <option value="NORMAL">NORMAL</option>
+            <option value="HIGH">HIGH</option>
+            <option value="LOW">LOW</option>
+        </select>
+        <br>
+        <label>Title:</label>
+        <input type="text" id="tTitle" name="tTitle">
+        <br>
+        <label>Assignee:</label>
+        <input type="text" id="assignedEmail" name="assignedEmail">
+        <br>
+        <label>Description:</label>
+        <input type="text" id="tDescription" name="tDescription">
+        <br>
+        <p id="pAuthor" name="pAuthor">Author: </p>
+        <p id="pCreated" name="pCreated">Created: </p>
+        <p id="pEdited" name="pEdited">Edited: </p>
+    </form>
+    <button id="btnSaveTask" name="btnSaveTask">Save Changes</button>
+</div>
+
+<div id="commentFragment">
+    <h4 style="color: aqua">Comments: </h4>
+    <ul id="commentList" name="commentList">
+    </ul>
+    <br>
+    <form id="commentForm">
+        <input type="text" id="commentInput" name="commentInput" value="comment">
+        <button id="btnComment" name="btnComment">Save Comment</button>
+    </form>
+
+</div>
+
+</html>

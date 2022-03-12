@@ -125,8 +125,7 @@ public class TaskServiceImpl implements TaskService{
 
         newComment.setComment_author(userRepo.findByEmail(commentInput.getAuthorEmail()));
         newComment.setTask(task);
-        //newComment.setCreateDate(LocalDateTime.now()); für Test
-        newComment.setCreateDate(LocalDateTime.of(2000,1,1,1,1));
+        newComment.setCreateDate(LocalDateTime.now());
         newComment.setText(commentInput.getText());
 
         task.addComments(newComment);
@@ -144,6 +143,7 @@ public class TaskServiceImpl implements TaskService{
         task.setPriority(input.getTPriority());
         task.setStatus(input.getStatus());
         task.setPriority(input.getTPriority());
+        task.setTitle(input.getTaskTitle());
 
         return task;
     }
