@@ -149,8 +149,8 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public void deleteTask(TaskDTO input){
-        Task task = taskRepo.findTaskById(input.getTaskId());
+    public void deleteTask(Long taskId){
+        Task task = taskRepo.findTaskById(taskId);
         List<Comment> comments = task.getComments();
 
         for (Comment c:comments){

@@ -58,11 +58,6 @@ public class TaskController {
         return "createTaskFragment";
     }
 
-    @RequestMapping("/commentDoc")
-    public String retrieveCommentDoc(){
-        return "commentsFragment";
-    }
-
     @RequestMapping("/taskDetails")
     public String retrieveTaskDetails(){
         return "taskDetailsFragment";
@@ -111,12 +106,11 @@ public class TaskController {
         log.debug("Principal ->" + principal.getName());
     }
 
-    @DeleteMapping("/task/delete")
-    public ResponseEntity<?> deleteTask(@RequestBody TaskDTO input){
-        taskService.deleteTask(input);
+    @DeleteMapping("/task/{id}/delete")
+    public ResponseEntity<?> deleteTask(@PathVariable String id){
+        taskService.deleteTask(Long.valueOf(id));
 
         return ResponseEntity.status(HttpStatus.OK).body(new TaskResponseDTO("Aufgabe wurde erfolgreich gelöscht"));
-
     }
 
     @RequestMapping(value = "/task/{id}/", method = {RequestMethod.GET,RequestMethod.POST})

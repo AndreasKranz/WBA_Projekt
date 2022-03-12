@@ -24,5 +24,5 @@ public interface TaskService {
     List<CommentDTO> listAllComments(Long taskId);
 
 
-    void deleteTask(TaskDTO input);
+    void deleteTask(Long taskId);
 }
