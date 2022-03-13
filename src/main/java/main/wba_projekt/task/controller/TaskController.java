@@ -4,6 +4,7 @@ import main.wba_projekt.task.DTO.CommentDTO;
 import main.wba_projekt.task.DTO.CommentResponseDTO;
 import main.wba_projekt.task.DTO.TaskDTO;
 import main.wba_projekt.task.DTO.TaskResponseDTO;
+import main.wba_projekt.task.model.Comment;
 import main.wba_projekt.task.model.Task;
 import main.wba_projekt.task.repository.CommentRepository;
 import main.wba_projekt.task.repository.TaskRepository;
@@ -94,8 +95,9 @@ public class TaskController {
     public ResponseEntity<?> writeComment(@RequestBody CommentDTO input, HttpServletRequest request){
         String commentAuthor = request.getUserPrincipal().getName();
         input.setAuthorEmail(commentAuthor);
-        taskService.addComment(input);
+        Comment addedComment = taskService.addComment(input);
 
+        commentRepo.save(addedComment);
 
         return ResponseEntity.status(HttpStatus.OK).body(new CommentResponseDTO("Neues Kommentar wurde erstellt"));
     }

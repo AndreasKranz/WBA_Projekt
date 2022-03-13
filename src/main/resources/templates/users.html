@@ -1,26 +1,35 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>List Users</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.bundle.js"></script>
 </head>
 <body>
-<div class="container text-center">
-    <div>
-        <form th:action="@{/logout}" method="post">
-            <p>
+
+    <nav class="navbar navbar-expand-md navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
                 Welcome <b>[[${#request.userPrincipal.principal.fullName}]]</b>
-            </p>
-            <input type="submit" value="Sign Out" />
-        </form>
-    </div>
-
-    <div>
-        <form th:action="@{/board}" method="get">
-            <input type="submit" value="show Board">
-        </form>
-    </div>
-
+            </a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto" >
+                    <li class="nav-item navbar-nav p-1">
+                        <form th:action="@{/board}" method="get">
+                            <input type="submit" value="Show board" class="btn btn-outline-dark">
+                        </form>
+                    </li>
+                    <li class="nav-item navbar-nav p-1">
+                        <form th:action="@{/logout}" method="post">
+                            <input type="submit" value="Sign Out" class="btn btn-outline-success"/>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container text-center">
     <div>
         <h1>List of Users</h1>
     </div>

@@ -125,13 +125,43 @@ async function drawTask(taskId) {
     document.getElementById("taskDetails").innerHTML ="";
     document.getElementById("taskDetails").innerHTML = resValue;
 
+    const urlEmails = "http://localhost:8080/usernames";
+    let upns;
+
+    try {
+        const responsePromise = await fetch(urlEmails)
+        if (!responsePromise.ok){
+            throw new Error();
+        }
+        upns = await responsePromise.json();
+        console.log(upns);
+    }
+    catch (err){
+        console.log(err);
+    }
+
+    let preEditAssignee = json.assignedEmail;
+
+    let select = document.getElementById("assignedEmail");
+
+    upns.forEach(appendOptions);
+
+    function appendOptions(email) {
+        let opt = document.createElement('option');
+        opt.value = email;
+        opt.innerHTML = email;
+        select.appendChild(opt);
+        if (email === preEditAssignee){
+            opt.selected = true;
+        }
+    }
+
+
 
     let inputTitle = document.getElementById("tTitle");
     inputTitle.defaultValue = json.taskTitle;
     let inputText =document.getElementById("tDescription");
     inputText.defaultValue = json.tdescription;
-    let inputAssignee = document.getElementById("assignedEmail")
-    inputAssignee.defaultValue = json.assignedEmail;
     let pAuthor =document.getElementById("pAuthor");
     pAuthor.innerHTML += json.authorEmail;
     let hId = document.getElementById("hTaskId");
@@ -175,8 +205,6 @@ async function deleteTask(taskId){
 }
 
 async function drawComments(taskId) {
-
-
     const urlComments = "http://localhost:8080/task/" + taskId + "/comments";
     let json;
     try {
@@ -220,7 +248,7 @@ async function writeComment(idTask){
     let res;
 
     try {
-        const responsePromise = fetch(url,{
+        const responsePromise =  fetch(url,{
             method: 'POST',
             credentials: 'include',
             headers : {
@@ -228,9 +256,6 @@ async function writeComment(idTask){
             },
             body: commentPayload
         })
-        if(responsePromise === null){
-            throw new Error()
-        }
         if(!responsePromise.ok){
             throw new Error()
         }
@@ -239,8 +264,7 @@ async function writeComment(idTask){
     }catch (err){
         console.log(err)
     }
-
-
+    //await fillTaskTable(idTask);
 }
 
 function setDropDowns(prio, status) {
@@ -289,6 +313,7 @@ function setDropDowns(prio, status) {
 }
 
 async function saveEdits() {
+    let pError = document.createElement('p');
 
     let taskTitleValue = document.getElementById("tTitle").value;
     let descriptionValue = document.getElementById("tDescription").value;
@@ -298,39 +323,46 @@ async function saveEdits() {
     let temp = document.getElementById("hTaskId").innerHTML;
     let taskIdValue = new Number(temp);
 
-    const obj = {
-        taskTitle: taskTitleValue,
-        tdescription: descriptionValue,
-        assignedEmail: assignedEmailValue,
-        tpriority: priorityValue,
-        status: statusValue,
-        taskId: taskIdValue,
-    }
+    if (taskTitleValue === null || taskTitleValue === "" || descriptionValue === null || descriptionValue === ""){
+        pError.innerHTML = "Title cannot be empty!";
+        document.getElementById("wrongInputSpace").appendChild(pError);
+    } else {
 
-    let payload = JSON.stringify(obj);
 
-    const url = 'http://localhost:8080/task/edit';
-
-    let res;
-
-    try {
-        const responsePromise = await fetch(url,{
-            method: 'POST',
-            credentials : 'include',
-            headers : {
-                'Content-Type': 'application/json'
-            },
-            body: payload
-        })
-        if (!responsePromise.ok) {
-            throw new Error("Error! status: ${response.status}");
+        const obj = {
+            taskTitle: taskTitleValue,
+            tdescription: descriptionValue,
+            assignedEmail: assignedEmailValue,
+            tpriority: priorityValue,
+            status: statusValue,
+            taskId: taskIdValue,
         }
-        res = await responsePromise.json();
-        console.log(res);
-    } catch (err) {
-        console.log(err);
+
+        let payload = JSON.stringify(obj);
+
+        const url = 'http://localhost:8080/task/edit';
+
+        let res;
+
+        try {
+            const responsePromise = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: payload
+            })
+            if (!responsePromise.ok) {
+                throw new Error("Error! status: ${response.status}");
+            }
+            res = await responsePromise.json();
+            console.log(res);
+        } catch (err) {
+            console.log(err);
+        }
+        await fillTaskTable(taskIdValue);
     }
-    await fillTaskTable(taskIdValue);
 }
 
 async function drawTaskForm() {
@@ -348,12 +380,6 @@ async function drawTaskForm() {
     }
     document.getElementById("taskDetails").innerHTML = res;
 
-    document.getElementById("btnCreate").addEventListener('click',()=>createTask());
-
-
-}
-
-async function createTask(){
     const urlEmails = "http://localhost:8080/usernames";
 
     let upns;
@@ -370,45 +396,67 @@ async function createTask(){
         console.log(err);
     }
 
+    let select = document.getElementById("taskAssignee");
 
+    upns.forEach(appendOptions);
+
+    function appendOptions(email) {
+        let opt = document.createElement('option');
+        opt.value = email;
+        opt.innerHTML = email;
+        select.appendChild(opt);
+    }
+
+    document.getElementById("btnCreate").addEventListener('click',()=>createTask());
+
+
+}
+
+async function createTask(){
+    let pError = document.createElement('p');
 
     let title = document.getElementById("taskTitle").value;
     let description = document.getElementById("taskText").value;
     let assignee =document.getElementById("taskAssignee").value;
-    //Todo checken ob es User gibt
     let prio = document.getElementById("taskPriority").value;
 
-    let obj = {
-        taskTitle: title,
-        tdescription: description,
-        assignedEmail: assignee,
-        tpriority: prio,
-    }
+    if(title === null || title === "" || description === "" || description === null){
+        pError.innerHTML = "Title or Description my not be empty !";
+        document.getElementById("wrongInputSpace").appendChild(pError);
+    }else {
 
-    let createPayload = JSON.stringify(obj);
-
-    const url = 'http://localhost:8080/task/create';
-
-    let res;
-    try {
-        const responsePromise = await fetch(url,{
-            method: 'POST',
-            credentials : 'include',
-            headers : {
-                'Content-Type': 'application/json'
-            },
-            body: createPayload
-        })
-        if (!responsePromise.ok) {
-            throw new Error("Error! status: ${response.status}");
+        let obj = {
+            taskTitle: title,
+            tdescription: description,
+            assignedEmail: assignee,
+            tpriority: prio,
         }
-        res = await responsePromise.json();
-        console.log(res);
-    } catch (err) {
-        console.log(err);
-    }
 
-    fillTaskTable();
+        let createPayload = JSON.stringify(obj);
+
+        const url = 'http://localhost:8080/task/create';
+
+        let res;
+        try {
+            const responsePromise = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: createPayload
+            })
+            if (!responsePromise.ok) {
+                throw new Error("Error! status: ${response.status}");
+            }
+            res = await responsePromise.json();
+            console.log(res);
+        } catch (err) {
+            console.log(err);
+        }
+
+        fillTaskTable();
+    }
 }
 
 

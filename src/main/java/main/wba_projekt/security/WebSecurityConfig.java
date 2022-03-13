@@ -48,9 +48,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                //.antMatchers("/","","/css/**","/js/**","/img/**","/webfonts/**","/favicon.ico").permitAll()
-                .antMatchers("/users").authenticated()
-                .anyRequest().authenticated()
+                //.antMatchers("/register_process","/register").permitAll()
+                .antMatchers("/","/css/**","/js/**","/img/**","/webfonts/**","/favicon.ico","/register","/register_process").permitAll()
+                .antMatchers("/users","/board","task/**","/tasks","/usernames").authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .formLogin()
                     .usernameParameter("email")

@@ -119,7 +119,7 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public void addComment(CommentDTO commentInput) {
+    public Comment addComment(CommentDTO commentInput) {
         Task task = taskRepo.findTaskById(commentInput.getTaskId());
         Comment newComment = new Comment();
 
@@ -130,8 +130,9 @@ public class TaskServiceImpl implements TaskService{
 
         task.addComments(newComment);
 
-        commentRepo.save(newComment);
-        taskRepo.save(task);
+        return newComment;
+        //commentRepo.save(newComment);
+        //taskRepo.save(task);
     }
 
     public Task editTask(TaskDTO input){

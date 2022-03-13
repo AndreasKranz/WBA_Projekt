@@ -2,7 +2,6 @@ package main.wba_projekt.security.service;
 
 import main.wba_projekt.security.model.User;
 import main.wba_projekt.security.repository.UserRepository;
-import main.wba_projekt.task.model.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,10 +15,6 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private UserRepository userRepo;
 
-    @Override
-    public void addCreatedTask(Task newTask) {
-      //Todo
-    }
 
     @Override
     public String[] listEmails() {
