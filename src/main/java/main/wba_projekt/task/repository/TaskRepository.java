@@ -7,8 +7,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
-
+    /**
+     * gets a task from db with its
+     * @param id
+     * @return task object
+     */
     @Query("select t FROM Task t WHERE t.id =?1")
     Task findTaskById(Long id);
-
 }

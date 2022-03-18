@@ -10,23 +10,23 @@ import java.util.List;
 
 @Transactional
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepo;
 
-
+    /**
+     * list emails of all users
+     * @return String array with email adresses
+     */
     @Override
     public String[] listEmails() {
         List<User> users = userRepo.findAll();
-
         String[] emails = new String[users.size()];
 
-        for (int i = 0; i< users.size();i++){
+        for (int i = 0; i < users.size(); i++) {
             emails[i] = users.get(i).getEmail();
         }
-
-
         return emails;
     }
 }

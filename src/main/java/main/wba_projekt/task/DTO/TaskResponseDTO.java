@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
+/**
+ * dto send with http response
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

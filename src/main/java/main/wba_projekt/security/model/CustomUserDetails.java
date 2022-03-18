@@ -6,11 +6,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+/**
+ * used for spring security funcionality
+ */
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
     private User user;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -47,7 +49,7 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
-    public String getFullName(){
-        return user.getFirstName() +  " " + user.getLastName();
+    public String getFullName() {
+        return user.getFirstName() + " " + user.getLastName();
     }
 }

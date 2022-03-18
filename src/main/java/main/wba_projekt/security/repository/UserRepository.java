@@ -8,6 +8,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    /**
+     * gets user entity from db with the apropiate email adress as userprincipalname
+     *
+     * @param email
+     * @return user entity
+     */
     @Query("SELECT u FROM User u WHERE u.email = ?1")
     User findByEmail(String email);
 }

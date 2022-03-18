@@ -11,37 +11,49 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-//@NoArgsConstructor
+
 public class BoardController {
 
     private static final Logger log = LoggerFactory.getLogger(BoardController.class);
 
-    //@Autowired
     private UserRepository userRepo;
 
     @Autowired
-    public BoardController(UserRepository userRepo){this.userRepo = userRepo;}
+    public BoardController(UserRepository userRepo) {
+        this.userRepo = userRepo;
+    }
 
-    @GetMapping( "")
-    public String viewHomagePage(){
-        log.debug("redirect to index jooooo");
+
+    /**
+     * MVC delievers index page
+     *
+     * @return index
+     */
+    @GetMapping("")
+    public String viewHomagePage() {
         return "index";
     }
 
     /**
+     * Sets up a view to register a new User
      *
      * @param model
-     * @return
+     * @return signup-form with model added
      */
     @GetMapping("/register")
-    public String showRegistrationForm(Model model){
-        model.addAttribute("user",new User());
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("user", new User());
 
         return "signup_form";
     }
 
+    /**
+     * Delivers view of the ticketboard
+     *
+     * @return board
+     */
     @RequestMapping("/board")
-    public String showBoard(){
+    public String showBoard() {
 
         return "board";
     }

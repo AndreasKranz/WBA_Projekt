@@ -12,18 +12,17 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.List;
 
+/**
+ * Entity of the board where the tasks are created and hold
+ */
 @Entity
 @Setter
 @Getter
-@ToString(exclude = {"users","tasks"})
+@ToString(exclude = {"users", "tasks"})
 @NoArgsConstructor
 public class Board extends BaseEntity<Long> {
 
     private String title;
-
-
-
-
 
     @OneToMany(mappedBy = "assigned_board", orphanRemoval = true)
     private List<User> users;

@@ -27,29 +27,42 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    /**
+     * handles register of a new user, user from html/thymeleaf
+     *
+     * @param user
+     * @return sucess view after registration
+     */
     @PostMapping("/process_register")
-    public String processRegister(User user){
+    public String processRegister(User user) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-
         userRepo.save(user);
-
         return "register_success";
     }
 
+    /**
+     * lists all Users in the model and returns the view
+     *
+     * @param model empty
+     * @return view with users added to model
+     */
     @GetMapping("/users")
     public String listUsers(Model model) {
         List<User> listUsers = userRepo.findAll();
         model.addAttribute("listUsers", listUsers);
-
         return "users";
     }
 
-    @RequestMapping(value = "/usernames",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> listAllUsernames(){
+    /**
+     * sends all emails adresses of registered users as json
+     *
+     * @return json arry with email adresses
+     */
+    @RequestMapping(value = "/usernames", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> listAllUsernames() {
         String[] arr = userService.listEmails();
-
         return ResponseEntity.status(HttpStatus.OK).body(arr);
     }
 }

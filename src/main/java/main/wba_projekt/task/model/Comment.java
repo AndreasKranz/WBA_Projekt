@@ -12,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
+/**
+ * entity of comment storred in db, with relation of to the author and the task under which the comment was written
+ */
 @Entity
 @Setter
 @Getter
@@ -22,8 +25,6 @@ public class Comment extends BaseEntity<Long> {
     private String text;
 
     private LocalDateTime createDate;
-
-
 
     @ManyToOne
     @JoinColumn(name = "comment_author_id")

@@ -15,10 +15,14 @@ import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Entity of the task storred permanently in db, with relation to author, user which the task is assigned to,
+ * the comments written under the task and the board which the task is located in
+ */
 @Entity
 @Getter
 @Setter
-@ToString(exclude = {"assignee","comments"})
+@ToString(exclude = {"assignee", "comments"})
 @NoArgsConstructor
 public class Task extends BaseEntity<Long> {
 
@@ -33,8 +37,6 @@ public class Task extends BaseEntity<Long> {
     private LocalDateTime createDate;
 
     private LocalDateTime editDate;
-
-
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "author_id", nullable = false)
@@ -51,9 +53,12 @@ public class Task extends BaseEntity<Long> {
     @OneToMany(mappedBy = "task", orphanRemoval = true)
     private List<Comment> comments = new java.util.ArrayList<>();
 
-    public void addComments(Comment comment){
+    /**
+     * like a set method used to add a comment to the list
+     *
+     * @param comment which should be added
+     */
+    public void addComments(Comment comment) {
         this.comments.add(comment);
     }
-
-
 }

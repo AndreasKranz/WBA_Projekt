@@ -9,13 +9,15 @@ import main.wba_projekt.task.model.Task;
 import javax.persistence.*;
 import java.util.*;
 
+/**
+ * model of user storred in db
+ */
 @Entity
 @Setter
 @Getter
-@ToString(exclude = {"createdtasks","assigned_board","written_comments"})
+@ToString(exclude = {"createdtasks", "assigned_board", "written_comments"})
 @NoArgsConstructor
 public class User extends BaseEntity<Long> {
-
 
     private String firstName;
 
@@ -27,12 +29,13 @@ public class User extends BaseEntity<Long> {
 
     private String password;
 
+
     @Setter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "author",  orphanRemoval = true)
+    @OneToMany(mappedBy = "author", orphanRemoval = true)
     private List<Task> createdtasks;
 
     @Setter(AccessLevel.NONE)
-    @OneToMany(mappedBy = "comment_author",  orphanRemoval = true)
+    @OneToMany(mappedBy = "comment_author", orphanRemoval = true)
     private List<Comment> written_comments;
 
     @ManyToOne()

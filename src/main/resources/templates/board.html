@@ -2,36 +2,44 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Kanbanboard</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.bundle.js"></script>
     <script th:src="@{/js/tasks.js}"></script>
 </head>
 <body id="body" onload="fillTaskTable()">
 
+<nav class="navbar navbar-expand-md navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            Welcome <b>[[${#request.userPrincipal.principal.fullName}]]</b>
+        </a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item navbar-nav p-1">
+                    <form th:action="@{/users}" method="get">
+                        <input type="submit" value="Users" class="btn btn-outline-dark">
+                    </form>
+                </li>
+                <li class="nav-item navbar-nav p-1">
+                    <button id="btnCreateForm" name="btnCreateForm" class="btn btn-outline-primary">Create task</button>
+                </li>
+                <li class="nav-item navbar-nav p-1">
+                    <form th:action="@{/logout}" method="post">
+                        <input type="submit" value="Sign Out" class="btn btn-outline-success"/>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-<div>
-    <ul>
-        <li>
-            <form th:action="@{/users}" method="GET">
-                <input type="submit" value="Users">
-            </form>
-        </li>
-        <li>
-            <form th:action="@{/logout}" method="POST">
-                <input type="submit" value="Sign out">
-            </form>
-        </li>
-        <li>
-            <button id="btnCreateForm" name="btnCreateForm">Create a task</button>
-        </li>
-
-    </ul>
-</div>
 
 <div id="main">
-
-    <div id="tableSpace">
-        <table>
-            <thead>
+    <div id="tableSpace" class="container-fluid pt-3 mt-4">
+        <table class="table table-bordered">
+            <thead class="table-dark">
             <tr>
                 <th>ON HOLD</th>
                 <th>BACKLOG</th>
@@ -42,36 +50,36 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td id="tdHold">
+            <div class="row-cols-6">
+                <tr>
+                    <td id="tdHold" class="table-danger col-2 bg-gradient">
 
-                </td>
-                <td id="tdBacklog">
+                    </td>
+                    <td id="tdBacklog" class="table-primary col-2">
 
-                </td>
-                <td id="tdSprint">
+                    </td>
+                    <td id="tdSprint" class="table-info col-2">
 
-                </td>
-                <td id="tdProgress">
+                    </td>
+                    <td id="tdProgress" class="table-success col-2">
 
-                </td>
-                <td id="tdReview">
+                    </td>
+                    <td id="tdReview" class="table-warning col-2">
 
-                </td>
-                <td id="tdDone">
+                    </td>
+                    <td id="tdDone" class="table-secondary col-2">
 
-                </td>
-            </tr>
+                    </td>
+                </tr>
+            </div>
             </tbody>
         </table>
     </div>
 
-    <div id="taskSpace">
-        <div id="taskDetails">
 
-        </div>
+    <div id="taskDetails" class="container-fluid">
+
     </div>
-
 </div>
 
 
